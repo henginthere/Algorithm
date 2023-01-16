@@ -1,0 +1,25 @@
+import java.util.*;
+import java.io.*;
+
+
+public class Main
+{
+    public static void main(String args[]) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        st = new StringTokenizer(br.readLine());
+        String tmp = st.nextToken();
+        String[] arr = tmp.split("-");
+        ArrayList<Character> a_arr = new ArrayList<>();
+        for(int i=0;i<arr.length;i++){
+            a_arr.add(arr[i].charAt(0));
+        }
+        String answer = "";
+        for(int i=0;i<a_arr.size();i++){
+            answer+=a_arr.get(i);
+        }
+    
+        System.out.println(answer);
+    }
+}
