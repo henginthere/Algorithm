@@ -1,0 +1,99 @@
+import java.io.*;
+import java.util.*;
+
+
+class Point{
+    int x;
+    int y;
+
+    Point(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Main {
+
+    static int N;
+    static int[][] map;
+    static boolean[][] visited;
+    static ArrayList<Integer> house = new ArrayList<>();
+    static int group;
+    static int houseCnt;
+    static Queue<Point> queue = new LinkedList<>();
+    static int[] dx = { 0,0,-1,1};
+    static int[] dy = {1,-1,0,0};
+
+    static void bfs(int x, int y){
+
+        houseCnt++; //집의 수
+        if(isIn(x,y)||!visited[x][y]){
+            visited[x][y]=true;
+            queue.add(new Point(x,y));
+
+        }
+
+        while(!queue.isEmpty()){
+            Point cur = queue.poll();
+            for(int i=0;i<4;i++) {
+                int nx = cur.x + dx[i];
+                int ny = cur.y + dy[i];
+
+                if (isIn(nx,ny)&&map[nx][ny] == 1 && !visited[nx][ny]) {
+                    bfs(nx, ny);
+
+                }
+            }
+
+        }
+    }
+
+    static boolean isIn(int x, int y){
+        if(x<0||x>=N||y<0||y>=N) return false;
+        return true;
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        N = Integer.parseInt(br.readLine());
+        group = 1;
+        houseCnt = 0;
+
+        map = new int[N][N];
+        visited = new boolean[N][N];
+        for(int i=0;i<N;i++){
+            String tmp = br.readLine();
+            for(int j=0;j<N;j++) {
+                map[i][j] = tmp.charAt(j)-'0';
+            }
+        }
+
+        for(int i=0;i<N;i++){
+            for(int j=0;j<N;j++){
+                if(map[i][j]==1&&!visited[i][j]) {
+                    bfs(i, j);
+                    house.add(houseCnt); //단지 다 센거니까 집 수 넣기
+                    group++; //단지수 ++
+                    houseCnt = 0;
+                }
+            }
+        }
+
+        int[] answer = new int[house.size()];
+        for(int i=0;i<house.size();i++){
+            answer[i]=house.get(i);
+
+        }
+        Arrays.sort(answer);
+        System.out.println(answer.length);
+
+        for(int x:answer){
+            System.out.println(x);
+        }
+    }
+}
+
+
+
