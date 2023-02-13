@@ -1,0 +1,62 @@
+import java.io.*;
+import java.util.*;
+
+
+class Pair{
+    int weight;
+    int cost;
+
+    Pair(int weight, int cost){
+        this.weight = weight;
+        this.cost = cost;
+    }
+}
+public class Main {
+
+    static int W, N;
+    static PriorityQueue<Pair> pq;
+    public static void main(String[] args) throws IOException{
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
+        W = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        pq = new PriorityQueue<>((o1,o2)->o2.cost-o1.cost);
+
+        int answer = 0;
+
+        for(int i=0;i<N;i++){
+            st = new StringTokenizer(br.readLine());
+            int w = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+            pq.add(new Pair(w,c));
+        }
+
+        while(!pq.isEmpty()){
+            Pair tmp = pq.poll();
+            int t_w = tmp.weight;
+            int t_c = tmp.cost;
+
+            if(W==0) break;
+
+            if(t_w>W){
+                answer += W * t_c;
+                W -= W;
+            }
+            else{
+                answer += t_w * t_c;
+                W -= t_w;
+            }
+        }
+
+        System.out.println(answer);
+
+
+
+    }
+}
+
+
+
