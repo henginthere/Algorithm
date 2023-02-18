@@ -1,0 +1,43 @@
+import java.util.*;
+import java.io.*;
+
+class Solution {
+    
+    static String tmp="";
+    static String[] alph = {"A","E","I","O","U"};
+    static ArrayList<String> voca = new ArrayList<>();
+    static void getWord(int n, int k){
+        if(n==k){
+            voca.add(tmp);
+            return;
+        }
+        for(int i=0;i<5;i++){
+            tmp += alph[i];
+            getWord(n,k+1);
+            tmp = tmp.substring(0,tmp.length()-1);
+        }
+        
+    }
+    public int solution(String word) {
+        int answer = 0;
+       
+        //중복순열
+        for(int i=1;i<=5;i++){
+            getWord(i,0);
+        }
+        
+        String[] tmpVoca = new String[voca.size()];
+        for(int i=0;i<voca.size();i++){
+            tmpVoca[i] = voca.get(i);
+        }
+        
+        Arrays.sort(tmpVoca);
+        
+        for(int i=0;i<tmpVoca.length;i++){
+            if(tmpVoca[i].equals(word)){
+                answer = i+1;
+            }
+        }
+        return answer;
+    }
+}
