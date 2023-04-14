@@ -1,0 +1,103 @@
+import java.util.*;
+import java.io.*;
+
+class Solution {
+
+    static boolean[][] map;
+    static Queue<Point> queue;
+    static boolean[][] visited;
+    static int ans;
+    static int sX, sY, iX, iY;
+    
+    static int[] dx = {-1,1,0,0};
+    static int[] dy = {0,0,-1,1};
+    
+    static class Point{
+        int x;
+        int y;
+        int cnt;
+        
+        Point(int x, int y, int cnt){
+            this.x = x;
+            this.y = y;
+            this.cnt = cnt;
+        }
+    }
+    
+    static void fill(int x1, int y1, int x2, int y2){
+        for(int i=x1;i<=x2;i++){
+            map[i][y1] = true;
+            map[i][y2] = true;
+        }
+        for(int i=y1;i<=y2;i++){
+            map[x1][i] = true;
+            map[x2][i] = true;
+        }
+    }
+    
+    static void getLine(int x1, int y1, int x2, int y2){
+        for(int i=x1+1;i<x2;i++){
+            for(int j=y1+1;j<y2;j++){
+                map[i][j]=false;
+            }
+        }
+    }
+    
+    static void getAnswer(int x, int y, int cnt){
+        queue = new LinkedList<>();
+        queue.add(new Point(x, y, cnt));
+        visited[x][y] = true;
+        
+        while(!queue.isEmpty()){
+            Point tmp = queue.poll();
+            
+            if(tmp.x==iX && tmp.y==iY){
+                ans = Math.min(tmp.cnt/2,ans);
+            }
+            for(int d=0;d<4;d++){
+                int nx = tmp.x + dx[d];
+                int ny = tmp.y + dy[d];
+                if(nx<0||nx>=101||ny<0||ny>=101) continue;
+                if(!visited[nx][ny]&&map[nx][ny]){
+                    queue.add(new Point(nx,ny,tmp.cnt+1));
+                    visited[tmp.x][tmp.y]=true;
+                }
+            }     
+        }
+    }
+    
+    public int solution(int[][] rectangle, int characterX, int characterY, int itemX, int itemY) {
+        int answer = 0;
+        map = new boolean[101][101];
+        visited = new boolean[101][101];
+        sX = characterX *2;
+        sY = characterY *2;
+        iX = itemX *2;
+        iY = itemY *2;
+        
+        ans = Integer.MAX_VALUE;
+        
+        
+        for(int i=0;i<rectangle.length;i++) {
+            int lx = rectangle[i][0];
+            int ly = rectangle[i][1];
+            int rx = rectangle[i][2];
+            int ry = rectangle[i][3];
+            
+            fill(2*lx, 2*ly, 2*rx, 2*ry);
+        }
+        
+        for(int i=0;i<rectangle.length;i++) {
+            int lx = rectangle[i][0];
+            int ly = rectangle[i][1];
+            int rx = rectangle[i][2];
+            int ry = rectangle[i][3];
+            
+            getLine(2*lx, 2*ly, 2*rx, 2*ry);
+        }
+        
+        getAnswer(sX,sY,0);
+
+        return ans;
+    }
+}
